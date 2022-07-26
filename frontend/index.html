@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        ::selection {
+            color: white;
+        }
+
+        .slider {
+            height: 100vh;
+            width: 10px;
+            background-color: black;
+            position: absolute;
+            left: 30vw;
+            z-index: 2;
+        }
+
+        .bw_image {
+            position: absolute;
+            z-index: 1;
+            width: 50vw;
+            height: 100vh;
+            object-fit: cover;
+            object-position: 0 100%;
+
+        }
+
+        .color_image {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            object-position: 0 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section id="result">
+        <div class="slider" onmousedown="handleMouse(true);" onmouseup="handleMouse(false);"></div>
+        <img class="bw_image" src="assets/btw_image.jpg" alt="">
+        <img class="color_image" src="assets/color_image.png" alt="">
+    </section>
+
+    <script>
+
+        let _q = (q) => document.querySelector(q);
+
+
+
+        document.onselect = function () { return false };
+
+        _q(".bw_image").ondragstart = function () { return false };
+        _q(".bw_image").onselect = function () { return false };
+        _q(".color_image").ondragstart = function () { return false };
+        _q(".color_image").onselect = function () { return false };
+
+        let isMouseDown = false;
+        function handleMouse(status) {
+            console.log('mousedown');
+            isMouseDown = status;
+        }
+
+        let interval = setInterval(function () {
+            console.log(_q(".slider").getBoundingClientRect().x);
+            _q(".slider").style.left = _q(".slider").getBoundingClientRect().x + 1 + "px";
+            _q(".bw_image").style.width = _q(".slider").getBoundingClientRect().x + "px"
+        }, 1);
+
+
+        setTimeout(function () {
+            clearInterval(interval)
+        }, 2000)
+
+
+
+
+
+        document.addEventListener("mousemove", function (e) {
+            console.log(e.clientX)
+            isMouseDown ? _q(".slider").style.left = e.clientX + "px" : "";
+
+            isMouseDown ? _q(".bw_image").style.width = e.clientX + "px" : "";
+        })
+    </script>
+
+
+</body>
+
+</html>
